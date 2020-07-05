@@ -8,25 +8,37 @@ def reading_and_writing(media):
         reader = csv.DictReader(f_obj)
         for row in reader:
             if len(row) != 5:
-                errors.append('file structure error 2')
-                break
-            is_exist = Customer.objects.filter(username=row['customer']).count()
+                errors.append('file structure error')
+                return errors
+            try:
+                is_exist = Customer.objects.filter(username=row['customer']).count()
+            except KeyError:
+                errors.append('file structure error')
+                return errors
             if is_exist == 0:
                 try:
                     new_customer = Customer.objects.create(username=row['customer'],
                                                        spent_money=int(row['total']))
-                except ValueError:
-                    errors.append(row[2])
-                    break
+                except (ValueError, KeyError):
+                    errors.append('file structure error')
+                    return errors
             else:
-                new_customer = Customer.objects.get(username=row['customer'])
-                new_customer.spent_money += float(row['total'])
-                new_customer.save(update_fields=['spent_money'])
-            new_deal = Deal.objects.create(gem_name=row['item'],
-                                           quantity=row['quantity'],
-                                           date_of_deal=row['date'],
-                                           total_price=row['total'],
-                                           customer=new_customer)
+                try:
+                    new_customer = Customer.objects.get(username=row['customer'])
+                    new_customer.spent_money += int(row['total'])
+                    new_customer.save(update_fields=['spent_money'])
+                except (ValueError, KeyError):
+                    errors.append('file structure error')
+                    return errors
+            try:
+                Deal.objects.create(gem_name=row['item'],
+                                    quantity=row['quantity'],
+                                    date_of_deal=row['date'],
+                                    total_price=row['total'],
+                                    customer=new_customer)
+            except KeyError:
+                errors.append('file structure error')
+                return errors
     FileCSV.objects.get(id=media.id).file.delete()
     FileCSV.objects.get(id=media.id).delete()
     return errors

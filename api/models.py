@@ -6,6 +6,9 @@ class Customer(models.Model):
     username = models.CharField(max_length=64, unique=True)
     spent_money = models.IntegerField()
 
+    class Meta:
+        ordering = ('spent_money',)
+
 
 class Deal(models.Model):
     """Deal model: all information about deal"""
@@ -13,7 +16,7 @@ class Deal(models.Model):
     quantity = models.IntegerField()
     date_of_deal = models.DateTimeField()
     total_price = models.IntegerField()
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, verbose_name="deals")
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name="deals")
 
 
 class FileCSV(models.Model):
