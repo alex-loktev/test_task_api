@@ -6,11 +6,11 @@ docker https://docs.docker.com/engine/install/
 
 docker-compose https://docs.docker.com/compose/install/
 
-1)Клонируем данный репозиторий, в своодную папку.
+1)Клонируем данный репозиторий, в свободную папку.
 
 2)Переходим в папку нашего проекта, где находится файл docker-compose.yml
 
-3)Открываем терминал в текущей дериктории и прописываем команду "docker-compose up",
+3)Открываем терминал в текущей директории и прописываем команду "docker-compose up",
 
 нажимаем enter. Если возникла ошибка: "ERROR: Couldn't connect to Docker daemon at http+docker://localhost - is it running?", 
 попробуйте запустить через "sudo docker-compose up".
@@ -21,7 +21,7 @@ docker-compose https://docs.docker.com/compose/install/
 
 Сервис предоставляет api для обработки *.csv файлов.
 
-Данные файлы дожны содержать в себе истории сделок.
+Данные файлы должны содержать в себе истории сделок.
 
 Поля *.csv:
 
