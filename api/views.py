@@ -8,6 +8,8 @@ from .business_logic import *
 
 
 class GetFileView(APIView):
+    """Main view: implemented file reading and
+    output top five users"""
     parser_classes = [MultiPartParser, FormParser]
 
     def post(self, request):
@@ -15,7 +17,12 @@ class GetFileView(APIView):
         if serializer.is_valid():
             media = serializer.save()
             if str(media.file).split('.')[-1] != 'csv':
-                return Response("The file format is not allowed", status=status.HTTP_400_BAD_REQUEST)
+                FileCSV.objects.get(id=media.id).file.delete()
+                FileCSV.objects.get(id=media.id).delete()
+                return Response(
+                                "The file format is not allowed",
+                                status=status.HTTP_400_BAD_REQUEST
+                                )
             errors = reading_and_writing(media)
             if len(errors):
                 return Response(errors, status=status.HTTP_400_BAD_REQUEST)
@@ -40,10 +47,10 @@ class GetFileView(APIView):
         response = {'response': []}
         for i in range(len(customers)):
             user = {
-                        'username': customers[i].username,
-                        'spent_money': customers[i].spent_money,
-                        'gems': top_gems[i]
-                    }
+                'username': customers[i].username,
+                'spent_money': customers[i].spent_money,
+                'gems': top_gems[i]
+            }
             response['response'].append(user)
 
         return Response(response, status=status.HTTP_200_OK)

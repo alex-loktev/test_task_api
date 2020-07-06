@@ -3,6 +3,8 @@ from.models import *
 
 
 def reading_and_writing(media):
+    """This function is responsible for reading from a file
+    and writing to a db"""
     errors = []
     with open('media/' + str(media.file), "r") as f_obj:
         reader = csv.DictReader(f_obj)

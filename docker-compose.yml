@@ -1,0 +1,11 @@
+version: '3.3'
+
+services:
+
+ web:
+   build: .
+   command: "gunicorn -c gunicorn.py test_task.wsgi"
+   volumes:
+     - .:/home/code
+   ports:
+     - "8000:8000"
